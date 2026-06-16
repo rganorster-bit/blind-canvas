@@ -1,122 +1,185 @@
-Create a complete mobile-friendly web game in Hebrew called:
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>קווים עיוורים</title>
 
-"קווים עיוורים"
-(The Blind Canvas)
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0D47A1;
+color:white;
+text-align:center;
+padding:20px;
+margin:0;
+}
 
-The game should follow the Funmigo party-game style.
+.container{
+max-width:900px;
+margin:auto;
+}
 
-GAME FLOW:
+h1{
+background:#FFD400;
+color:black;
+padding:15px;
+border-radius:15px;
+}
 
-1. Display a welcome screen with the game logo and title:
-   "קווים עיוורים"
+.card{
+background:white;
+color:black;
+padding:20px;
+border-radius:20px;
+margin-top:20px;
+}
 
-2. One participant is selected as the artist.
+button{
+background:#FFD400;
+color:black;
+border:none;
+padding:15px 25px;
+font-size:20px;
+font-weight:bold;
+border-radius:12px;
+cursor:pointer;
+margin:10px;
+}
 
-3. The artist presses a button:
-   "פתח משימה"
+#challenge{
+font-size:40px;
+font-weight:bold;
+margin:20px;
+}
 
-4. The game randomly selects a drawing challenge from a large collection of at least 100 drawing prompts.
+#timer{
+font-size:80px;
+font-weight:bold;
+margin:20px;
+}
 
-5. The prompt is shown for 5 seconds only.
+.hidden{
+display:none;
+}
+</style>
+</head>
 
-6. After 5 seconds:
-   - The prompt disappears.
-   - A 60-second countdown timer begins automatically.
+<body>
 
-7. During the countdown:
-   - The artist is supposed to draw while blindfolded.
-   - The other players cannot see the prompt.
+<div class="container">
 
-8. When the timer reaches zero:
-   - Display a large button:
-     "הגיע זמן הניחושים"
+<h1>🎨 קווים עיוורים</h1>
 
-9. The group tries to guess what was drawn.
+<div class="card">
 
-10. Add a button:
-    "חשוף תשובה"
+<div id="challenge">
+לחצו על "פתח משימה"
+</div>
 
-11. Reveal the original prompt.
+<button onclick="newChallenge()">
+פתח משימה
+</button>
 
-12. Add a button:
-    "משימה חדשה"
+<div id="timer">60</div>
 
-13. Randomly select a new challenge.
+<button onclick="showAnswer()" class="hidden" id="answerBtn">
+חשוף תשובה
+</button>
 
-DESIGN:
+<h2 id="answer"></h2>
 
-- Hebrew RTL layout.
-- Funmigo style.
-- Dark blue background.
-- Yellow, white and black colors.
-- Large playful buttons.
-- Fun animations.
-- Mobile friendly.
-- Large countdown timer.
-- Professional commercial-quality design.
+<button onclick="location.reload()">
+משחק חדש
+</button>
 
-DRAWING CHALLENGES:
+</div>
 
-Easy:
-- שמש
-- ירח
-- בית
-- עץ
-- פרח
-- חתול
-- כלב
-- דג
-- ציפור
-- גלידה
-- כדורגל
-- מכונית
-- אופניים
-- עפיפון
-- לב
+</div>
 
-Medium:
-- טיל ממריא
-- גמל
-- טירה
-- סופרמן
-- חד קרן
-- אי בודד
-- רובוט
-- ספינת פיראטים
-- דרקון
-- ליצן
-- מגדל אייפל
-- גן חיות
-- רכבת הרים
-- צוללת
-- טרקטור
+<script>
 
-Funny:
-- תרנגולת רוקדת
-- חתול משחק כדורגל
-- פיל על קורקינט
-- כריש עם משקפיים
-- כלב מנגן בגיטרה
-- קוף אוכל פיצה
-- סבתא על סקייטבורד
-- פינגווין גולש
-- חד קרן עושה סלפי
-- ג'ירפה במכונית
+const challenges = [
 
-Hard:
-- פארק שעשועים
-- חוף ים
-- חללית בחלל
-- קרקס
-- חתונה
-- בית ספר
-- מסיבת יום הולדת
-- שדה תעופה
-- קמפינג
-- ג'ונגל
+"שמש","ירח","בית","עץ","פרח","חתול","כלב","דג","ציפור","גלידה",
+"כדורגל","מכונית","אופניים","עפיפון","לב","רובוט","דרקון","חד קרן",
+"טירה","טיל","גמל","פיל","קוף","כריש","פינגווין","טרקטור","סירה",
+"רכבת","מטוס","חללית","אי בודד","פארק שעשועים","חוף ים","קרקס",
+"מסיבת יום הולדת","בית ספר","גן חיות","קמפינג","ג'ונגל","חתונה",
+"תרנגולת רוקדת","פיל על קורקינט","חתול משחק כדורגל",
+"כלב מנגן בגיטרה","כריש עם משקפיים","קוף אוכל פיצה",
+"סבתא על סקייטבורד","חד קרן עושה סלפי","ג'ירפה במכונית",
+"מגדל אייפל","רכבת הרים","צוללת","שדה תעופה","סופרמרקט",
+"פיצה","המבורגר","עוגת יום הולדת","בלון","כתר",
+"מלך","מלכה","פיראט","שוטר","כבאי",
+"רופא","מורה","זמר","רקדן","גיבור על",
+"מפלצת","טרול","מכשפה","קוסם","אוצר",
+"מפה","מזוודה","מחשב","טלפון","שעון",
+"מטרייה","משקפיים","כובע","גיטרה","תוף",
+"ספר","עיפרון","מצלמה","אופנוע","טנק",
+"סקייטבורד","מגרש כדורסל","איצטדיון","מזרקה",
+"דולפין","צב","תנין","אריה","זברה"
+];
 
-Create at least 100 total prompts.
+let currentChallenge = "";
+let countdown;
 
-Use HTML, CSS and JavaScript in a single file.
-No external libraries required.
-Make it feel like a real Funmigo game.
+function newChallenge(){
+
+clearInterval(countdown);
+
+currentChallenge =
+challenges[Math.floor(Math.random()*challenges.length)];
+
+document.getElementById("challenge").innerHTML =
+currentChallenge;
+
+document.getElementById("answer").innerHTML = "";
+
+document.getElementById("answerBtn")
+.classList.add("hidden");
+
+setTimeout(()=>{
+
+document.getElementById("challenge").innerHTML =
+"⏳ ציירו בעיניים עצומות!";
+
+let time = 60;
+
+document.getElementById("timer").innerHTML = time;
+
+countdown = setInterval(()=>{
+
+time--;
+
+document.getElementById("timer").innerHTML = time;
+
+if(time<=0){
+
+clearInterval(countdown);
+
+document.getElementById("challenge").innerHTML =
+"🎉 הגיע זמן הניחושים!";
+
+document.getElementById("answerBtn")
+.classList.remove("hidden");
+
+}
+
+},1000);
+
+},5000);
+
+}
+
+function showAnswer(){
+
+document.getElementById("answer").innerHTML =
+"✅ התשובה: " + currentChallenge;
+
+}
+
+</script>
+
+</body>
+</html>
