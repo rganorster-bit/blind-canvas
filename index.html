@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>קווים עיוורים</title>
 
 <style>
+
 body{
 font-family:Arial,sans-serif;
 background:#0D47A1;
@@ -48,20 +51,23 @@ margin:10px;
 }
 
 #challenge{
-font-size:40px;
+font-size:42px;
 font-weight:bold;
 margin:20px;
+min-height:60px;
 }
 
 #timer{
 font-size:80px;
 font-weight:bold;
+color:#0D47A1;
 margin:20px;
 }
 
 .hidden{
 display:none;
 }
+
 </style>
 </head>
 
@@ -74,23 +80,23 @@ display:none;
 <div class="card">
 
 <div id="challenge">
-לחצו על "פתח משימה"
+לחצו על "משימה חדשה"
 </div>
 
 <button onclick="newChallenge()">
-פתח משימה
+🎲 משימה חדשה
 </button>
 
 <div id="timer">60</div>
 
-<button onclick="showAnswer()" class="hidden" id="answerBtn">
-חשוף תשובה
+<button id="answerBtn" class="hidden" onclick="showAnswer()">
+👀 חשוף תשובה
 </button>
 
 <h2 id="answer"></h2>
 
 <button onclick="location.reload()">
-משחק חדש
+🔄 משחק חדש
 </button>
 
 </div>
@@ -109,15 +115,10 @@ const challenges = [
 "תרנגולת רוקדת","פיל על קורקינט","חתול משחק כדורגל",
 "כלב מנגן בגיטרה","כריש עם משקפיים","קוף אוכל פיצה",
 "סבתא על סקייטבורד","חד קרן עושה סלפי","ג'ירפה במכונית",
-"מגדל אייפל","רכבת הרים","צוללת","שדה תעופה","סופרמרקט",
-"פיצה","המבורגר","עוגת יום הולדת","בלון","כתר",
-"מלך","מלכה","פיראט","שוטר","כבאי",
-"רופא","מורה","זמר","רקדן","גיבור על",
-"מפלצת","טרול","מכשפה","קוסם","אוצר",
+"מגדל אייפל","צוללת","טנק","מפלצת","אוצר",
 "מפה","מזוודה","מחשב","טלפון","שעון",
 "מטרייה","משקפיים","כובע","גיטרה","תוף",
-"ספר","עיפרון","מצלמה","אופנוע","טנק",
-"סקייטבורד","מגרש כדורסל","איצטדיון","מזרקה",
+"ספר","עיפרון","מצלמה","אופנוע","מזרקה",
 "דולפין","צב","תנין","אריה","זברה"
 ];
 
@@ -139,27 +140,22 @@ document.getElementById("answer").innerHTML = "";
 document.getElementById("answerBtn")
 .classList.add("hidden");
 
-setTimeout(()=>{
-
-document.getElementById("challenge").innerHTML =
-"⏳ ציירו בעיניים עצומות!";
-
 let time = 60;
 
 document.getElementById("timer").innerHTML = time;
 
-countdown = setInterval(()=>{
+countdown = setInterval(function(){
 
 time--;
 
 document.getElementById("timer").innerHTML = time;
 
-if(time<=0){
+if(time <= 0){
 
 clearInterval(countdown);
 
-document.getElementById("challenge").innerHTML =
-"🎉 הגיע זמן הניחושים!";
+document.getElementById("timer").innerHTML =
+"⏰ נגמר הזמן!";
 
 document.getElementById("answerBtn")
 .classList.remove("hidden");
@@ -168,14 +164,12 @@ document.getElementById("answerBtn")
 
 },1000);
 
-},5000);
-
 }
 
 function showAnswer(){
 
 document.getElementById("answer").innerHTML =
-"✅ התשובה: " + currentChallenge;
+"✅ המשימה הייתה: " + currentChallenge;
 
 }
 
